@@ -3,15 +3,14 @@ import Header from '@/components/Header.vue';
 import TextArea from '@/components/TextArea.vue';
 import { type Ref, ref } from 'vue';
 import Note from '@/components/Note.vue';
+import type { NoteType } from '../models/Note';
 
+const notes: Ref<NoteType[]> = ref([]);
 
-const notes: Ref<any[]> = ref([]);
-
-function addNote(noteText: string) {
+function addNote(noteText: string, emoji: string) {
   const creationDate = new Date();
-  notes.value.push({ text: noteText, date: creationDate });
+  notes.value.unshift({ id: Math.random(), text: noteText, date: creationDate, emoji: emoji });
 }
-
 </script>
 
 <template>
@@ -19,9 +18,9 @@ function addNote(noteText: string) {
   <main>
     <TextArea @createNote="addNote"></TextArea>
   </main>
-  <section>
-    <article class="notes-box" v-for="note in notes">
-      <Note :text="note.text" :date="note.date"></Note>
+  <section class="notes-box">
+    <article class="note-box" v-for="note in notes" :key="note.id">
+      <Note :text="note.text" :date="note.date" :emoji="note.emoji"></Note>
     </article>
   </section>
 </template>
@@ -39,6 +38,18 @@ main {
 }
 
 .notes-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.note-box {
   background-color: lightgray;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 200px;
+  padding: 10px;
+  border-radius: 10px;
 }
 </style>

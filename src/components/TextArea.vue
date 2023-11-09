@@ -1,22 +1,21 @@
 <script setup lang="ts">
 import { type Ref, ref, computed, watch } from 'vue';
-import Happy from './icons/Happy.vue';
+import { emojiToIcons } from '@/utils';
 
 const text: Ref<string> = ref("");
 
 const emit = defineEmits<{
-    createNote: [text: string]
+    createNote: [text: string, emoji: string],
+    setEmoji: [emoji: string]
 }>()
 
 const textLength = computed<number>((): number => {
-
     if (text.value.length <= 280) {
         return text.value.length
     }
     else {
         return 280;
     }
-
 })
 
 watch(text, () => {
@@ -26,24 +25,89 @@ watch(text, () => {
 })
 
 function postNote() {
-    emit('createNote', text.value);
+    if (text.value.length > 0 && currentEmoji.value !== "") {
+        emit('createNote', text.value, currentEmoji.value);
+        text.value = "";
+    }
 }
+
+const currentEmoji: Ref<string> = ref("");
+
+const emojis: Ref<string[]> = ref(["Happy", "Sad", "Surprised"]);
+
+function setEmoji(emoji: string) {
+    currentEmoji.value = emoji;
+}
+
 
 </script>
 
 <template>
     <form @submit.prevent="postNote()">
         <textarea v-model.trim="text" name="journal" id="journal"></textarea>
-        <div>
-            <Happy></Happy>
-        </div>
-        <div>
-            <span>{{ textLength }} / 280</span>
-            <button type="submit">Recordar</button>
+        <section class="icon-container">
+            <span :class="{ active: emoji === currentEmoji }" @click="setEmoji(emoji)" v-for="(emoji, index) in emojis ">
+                <component :is="emojiToIcons[emoji]"></component>
+            </span>
+        </section>
+        <div class="button-container">
+            <div class="text-length">
+                <span>{{ textLength }} / 280</span>
+            </div>
+            <div class="submit-btn">
+                <button type="submit">Recordar</button>
+            </div>
+
         </div>
     </form>
 </template>
 <style scoped>
+.button-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 1rem;
+}
+
+button {
+    background-color: rgb(12, 98, 22);
+    color: white;
+    padding: 5px;
+    width: 80px;
+    height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.text-length {
+    flex-grow: 0.5;
+}
+
+.submit-btn {
+    align-self: flex-end;
+}
+
+.button-container .text-length {
+    text-align: left;
+}
+
+.icon-container {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+}
+
+span {
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.active {
+    background-color: lightblue;
+}
+
 form {
     width: 100%;
     display: flex;
