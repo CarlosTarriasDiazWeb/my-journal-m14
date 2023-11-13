@@ -65,6 +65,8 @@ function setEmoji(emoji: string) {
 .button-container {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
     width: 100%;
     gap: 1rem;
 }
@@ -79,16 +81,10 @@ button {
     cursor: pointer;
 }
 
-.text-length {
-    flex-grow: 0.5;
-}
+
 
 .submit-btn {
-    align-self: flex-end;
-}
-
-.button-container .text-length {
-    text-align: left;
+    width: fit-content;
 }
 
 .icon-container {

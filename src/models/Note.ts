@@ -1,6 +1,6 @@
 export interface NoteType {
-    id: number;
+    id: `${string}-${string}-${string}-${string}-${string}`;
     text: string;
-    date: Date;
+    date: string;
     emoji: string
 }

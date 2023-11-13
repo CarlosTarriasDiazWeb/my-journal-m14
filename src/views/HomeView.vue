@@ -8,8 +8,12 @@ import type { NoteType } from '../models/Note';
 const notes: Ref<NoteType[]> = ref([]);
 
 function addNote(noteText: string, emoji: string) {
-  const creationDate = new Date();
-  notes.value.unshift({ id: Math.random(), text: noteText, date: creationDate, emoji: emoji });
+  const creationDate = new Date().toLocaleTimeString('en-US', {
+    hour12: false,
+    hour: "numeric",
+    minute: "numeric"
+  });
+  notes.value.unshift({ id: window.crypto.randomUUID(), text: noteText, date: creationDate, emoji: emoji });
 }
 </script>
 
@@ -20,7 +24,7 @@ function addNote(noteText: string, emoji: string) {
   </main>
   <section class="notes-box">
     <article class="note-box" v-for="note in notes" :key="note.id">
-      <Note :text="note.text" :date="note.date" :emoji="note.emoji"></Note>
+      <Note :note="note"></Note>
     </article>
   </section>
 </template>
@@ -41,6 +45,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 90%;
 }
 
 .note-box {
@@ -49,7 +54,7 @@ main {
   flex-direction: column;
   justify-content: center;
   height: 200px;
-  padding: 10px;
+  padding: 15px;
   border-radius: 10px;
 }
 </style>
