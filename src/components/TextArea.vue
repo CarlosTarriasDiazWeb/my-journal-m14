@@ -6,7 +6,6 @@ const text: Ref<string> = ref("");
 
 const emit = defineEmits<{
     createNote: [text: string, emoji: string],
-    setEmoji: [emoji: string]
 }>()
 
 const textLength = computed<number>((): number => {
@@ -46,7 +45,7 @@ function setEmoji(emoji: string) {
     <form @submit.prevent="postNote()">
         <textarea v-model.trim="text" name="journal" id="journal"></textarea>
         <section class="icon-container">
-            <span :class="{ active: emoji === currentEmoji }" @click="setEmoji(emoji)" v-for="(emoji, index) in emojis ">
+            <span :class="{ active: emoji === currentEmoji }" @click="setEmoji(emoji)" v-for="emoji in emojis ">
                 <component :is="emojiToIcons[emoji]"></component>
             </span>
         </section>
@@ -57,7 +56,6 @@ function setEmoji(emoji: string) {
             <div class="submit-btn">
                 <button type="submit">Recordar</button>
             </div>
-
         </div>
     </form>
 </template>

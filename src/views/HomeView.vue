@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import Header from '@/components/Header.vue';
 import TextArea from '@/components/TextArea.vue';
-import { type Ref, ref } from 'vue';
+import { type Ref, ref, reactive } from 'vue';
 import Note from '@/components/Note.vue';
 import type { NoteType } from '../models/Note';
 
-const notes: Ref<NoteType[]> = ref([]);
+const notes = reactive<NoteType[]>([]);
 
 function addNote(noteText: string, emoji: string) {
   const creationDate = new Date().toLocaleTimeString('en-US', {
@@ -13,7 +13,7 @@ function addNote(noteText: string, emoji: string) {
     hour: "numeric",
     minute: "numeric"
   });
-  notes.value.unshift({ id: window.crypto.randomUUID(), text: noteText, date: creationDate, emoji: emoji });
+  notes.unshift({ id: window.crypto.randomUUID(), text: noteText, date: creationDate, emoji: emoji });
 }
 </script>
 
